@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_id": "autoalert-995e",
+    "project_number": "35958205954",
+    "name": "AutoAlert"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:35958205954:android:5ee47bf003fa0c98",
+        "client_id": "android:proyecto2016.eafit.autoalert",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "proyecto2016.eafit.autoalert"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "35958205954-32320aec482ltvie45uqut0hbk2ge977.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "proyecto2016.eafit.autoalert",
+            "certificate_hash": "03FA2956F518446F852558B40E4F3995FE32B487"
+          }
+        },
+        {
+          "client_id": "35958205954-dc5n2i7olf2rfpv9aqm43rjdgmrc0e23.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 2,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}

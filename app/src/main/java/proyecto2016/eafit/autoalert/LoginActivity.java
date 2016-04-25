@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.provider.ContactsContract;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
@@ -46,6 +47,24 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -88,6 +107,8 @@ public class    LoginActivity extends FragmentActivity implements LoaderCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -322,7 +343,42 @@ public class    LoginActivity extends FragmentActivity implements LoaderCallback
         }
 
         if (isEmailValid(email) & isPasswordValid(password)) {
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, DataObject.LOGIN_URL,
+
+            String url = "http://10.0.2.2:80/AUConsultar.php";
+
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("sEmail", email.trim()));
+            params.add(new BasicNameValuePair("sParametro", "Login"));
+            String resultServer  = getHttpPost(url,params);
+            System.out.println(resultServer);
+            ArrayList<String> array = new ArrayList<String>();
+            String pass = "";
+            String nombre = "";
+            try {
+                JSONArray jArray = new JSONArray(resultServer);
+                for (int i = 0; i < jArray.length(); i++) {
+                    JSONObject json = jArray.getJSONObject(i);
+                    array.add(json.getString("pass"));
+                    array.add(json.getString("nombres"));
+                }
+                pass = array.get(0);
+                nombre = array.get(1);
+            }catch (JSONException e ){
+                e.printStackTrace();
+            }
+            if (pass.trim().equals(password.trim())){
+                // Toast.makeText(LoginActivity.this, response, Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Bienvenido a AUTOALARM", Toast.LENGTH_LONG).show();
+                Intent i = new Intent(LoginActivity.this, NavigationDrawer.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("nombre", nombre);
+                bundle.putString("email", email);
+                i.putExtras(bundle);
+                startActivity(i);
+            }else{
+                Toast.makeText(LoginActivity.this, "Contraseña incorrecta, intentelo de nuevo!", Toast.LENGTH_LONG).show();
+            }
+            /*StringRequest stringRequest = new StringRequest(Request.Method.POST, DataObject.LOGIN_URL,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -365,7 +421,7 @@ public class    LoginActivity extends FragmentActivity implements LoaderCallback
             };
             //Adding the string request to the queue
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            requestQueue.add(stringRequest);
+            requestQueue.add(stringRequest);*/
         }
 
         if (cancel) {
@@ -448,5 +504,35 @@ public class    LoginActivity extends FragmentActivity implements LoaderCallback
 
         mEmailView.setAdapter(adapter);
     }
+
+    public String getHttpPost(String url,List<NameValuePair> params) {
+        StringBuilder str = new StringBuilder();
+        HttpClient client = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(url);
+
+        try {
+            httpPost.setEntity(new UrlEncodedFormEntity(params));
+            HttpResponse response = client.execute(httpPost);
+            StatusLine statusLine = response.getStatusLine();
+            int statusCode = statusLine.getStatusCode();
+            if (statusCode == 200) { // Status OK
+                HttpEntity entity = response.getEntity();
+                InputStream content = entity.getContent();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    str.append(line);
+                }
+            } else {
+                Log.e("Log", "Failed to download result..");
+            }
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return str.toString();
+    }
+
 
 }

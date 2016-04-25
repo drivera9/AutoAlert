@@ -1,4 +1,5 @@
 package proyecto2016.eafit.autoalert;
+//VERSION 25/04/2016
 
 import android.app.LoaderManager.LoaderCallbacks;
 import android.app.ProgressDialog;

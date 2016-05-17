@@ -23,50 +23,25 @@
             android:layout_gravity="center"/>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nombres y Apellidos"/>
+                android:id="@+id/textNombres"/>
 
-            <EditText
-                android:layout_marginLeft="20dp"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/editNombresApellidos"/>
+                android:id="@+id/textEmail"/>
 
         </LinearLayout>
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Numero de vehiculos"/>
-
-            <EditText
-                android:layout_marginLeft="20dp"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/editNumeroVehiculos"/>
-
-            <TextView
-                android:layout_marginLeft="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Efectividad"/>
-
-            <EditText
-                android:layout_marginLeft="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/editEfectividad"/>
-
-        </LinearLayout>
+            android:id="@+id/textVehiculos"/>
 
     </LinearLayout>
 

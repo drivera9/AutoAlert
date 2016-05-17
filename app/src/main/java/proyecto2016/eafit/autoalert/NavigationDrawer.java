@@ -25,16 +25,35 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class NavigationDrawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     String nombre;
     String url;
     String email;
+    String apellidos;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -62,10 +81,18 @@ public class NavigationDrawer extends AppCompatActivity
         nombre = bundle.getString("nombre");
         url  = bundle.getString("url");
         email = bundle.getString("email");
+        apellidos = bundle.getString("apellidos");
 
         toolBarLayout.setTitle( nombre);
         nombreDrawer.setText(nombre);
         emailDrawer.setText(email);
+
+        TextView Nombres = (TextView) findViewById(R.id.textNombres);
+        Nombres.setText(nombre + " " + apellidos);
+
+        TextView Email = (TextView) findViewById(R.id.textEmail);
+        Email.setText(email);
+
 
 
 
@@ -87,6 +114,29 @@ public class NavigationDrawer extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        String url = "http://10.0.2.2:80/AUConsultar.php";
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("sParametro", "Perfil"));
+        String resultServer  = getHttpPost(url,params);
+        System.out.println(resultServer);
+        ArrayList<String> array = new ArrayList<String>();
+        try {
+            JSONArray jArray = new JSONArray(resultServer);
+            for (int i = 0; i < jArray.length(); i++) {
+                JSONObject json = jArray.getJSONObject(i);
+                array.add(json.getString("marca"));
+                array.add(json.getString("referencia"));
+                array.add(json.getString("modelo"));
+                array.add(json.getString("fecha_soat"));
+                array.add(json.getString("fecha_tecno"));
+                array.add(json.getString("fecha_seguro"));
+
+            }
+        }catch (JSONException e ){
+            e.printStackTrace();
+        }
 
 
     }
@@ -183,5 +233,33 @@ public class NavigationDrawer extends AppCompatActivity
         return true;
     }
 
+    public String getHttpPost(String url,List<NameValuePair> params) {
+        StringBuilder str = new StringBuilder();
+        HttpClient client = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(url);
+
+        try {
+            httpPost.setEntity(new UrlEncodedFormEntity(params));
+            HttpResponse response = client.execute(httpPost);
+            StatusLine statusLine = response.getStatusLine();
+            int statusCode = statusLine.getStatusCode();
+            if (statusCode == 200) { // Status OK
+                HttpEntity entity = response.getEntity();
+                InputStream content = entity.getContent();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    str.append(line);
+                }
+            } else {
+                Log.e("Log", "Failed to download result..");
+            }
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return str.toString();
+    }
 
 }

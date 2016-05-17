@@ -91,7 +91,7 @@ public class DetalleVehiculos extends AppCompatActivity {
     private ArrayList<DataObject> getDataSetCarro() {
         ArrayList<DataObject> persons = new ArrayList<>();
 
-        String url = "http://192.168.1.6/AUConsultar.php";
+        String url = "http://10.0.2.2:80/AUConsultar.php";
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("sParametro", nombre));
@@ -118,7 +118,7 @@ public class DetalleVehiculos extends AppCompatActivity {
         if (array.size()>0) {
 
             for (int i = 0; i < array.size() / 6; i++) {
-                persons.add(new DataObject(array.get(i * 6).trim() + "-" + array.get((i * 6) + 1).trim(), "23 years old", R.drawable.paisaje3, "Descripcion", ""));
+                persons.add(new DataObject(array.get(i * 6).trim()  + " " + array.get((i * 6) + 1).trim(), "23 years old", R.drawable.paisaje3, "Descripcion", ""));
             }
         }else{
             persons.add(new DataObject("No hay vehiculos!", "23 years old", R.drawable.paisaje3, "Descripcion", ""));

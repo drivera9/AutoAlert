@@ -354,15 +354,18 @@ public class    LoginActivity extends FragmentActivity implements LoaderCallback
             ArrayList<String> array = new ArrayList<String>();
             String pass = "";
             String nombre = "";
+            String apellidos = "";
             try {
                 JSONArray jArray = new JSONArray(resultServer);
                 for (int i = 0; i < jArray.length(); i++) {
                     JSONObject json = jArray.getJSONObject(i);
                     array.add(json.getString("pass"));
                     array.add(json.getString("nombres"));
+                    array.add(json.getString("apellidos"));
                 }
                 pass = array.get(0);
                 nombre = array.get(1);
+                apellidos = array.get(2);
             }catch (JSONException e ){
                 e.printStackTrace();
             }
@@ -372,6 +375,7 @@ public class    LoginActivity extends FragmentActivity implements LoaderCallback
                 Intent i = new Intent(LoginActivity.this, NavigationDrawer.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("nombre", nombre);
+                bundle.putString("apellidos", apellidos);
                 bundle.putString("email", email);
                 i.putExtras(bundle);
                 startActivity(i);

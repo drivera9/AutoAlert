@@ -49,7 +49,10 @@
         <activity android:name=".ExploreDetalleFoto" />
         <activity android:name=".SampleFab" />
         <activity android:name=".DetalleVehiculos" />
-        <activity android:name=".DialogoPersonalizado"></activity>
+        <activity android:name=".DialogoPersonalizado" />
+        <activity android:name=".CrearVehiculo" />
+        <activity android:name=".MostrarSoat" />
+        <activity android:name=".MostrarTecno"></activity>
     </application>
 
 </manifest>

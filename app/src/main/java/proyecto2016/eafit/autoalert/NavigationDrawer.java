@@ -101,8 +101,8 @@ public class NavigationDrawer extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Intent i = new Intent(NavigationDrawer.this, CardView.class);
-                startActivity(i);*/
+                Intent i = new Intent(NavigationDrawer.this, CrearVehiculo.class);
+                startActivity(i);
             }
         });
 

@@ -9,38 +9,103 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="proyecto2016.eafit.autoalert.CrearVehiculo">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_centerVertical="true"
-        android:layout_alignParentStart="true">
+        android:layout_centerHorizontal="true">
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Placa"/>
+
+                <EditText
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editPlaca"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_margin="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tipo vehiculo"/>
+
+                <CheckBox
+                    android:id="@+id/checkCarro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Carro"/>
+
+                <CheckBox
+                    android:id="@+id/checkMoto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Moto"/>
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
 
         <TextView
             android:layout_marginTop="10dp"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Placa"/>
+            android:text="Marca"/>
 
         <EditText
+            android:gravity="center"
             android:layout_gravity="center"
-            android:layout_width="100dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:id="@+id/editPlaca"/>
+            android:id="@+id/editMarca"/>
 
         <TextView
             android:layout_marginTop="10dp"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Referencia y marca"/>
+            android:text="Referencia"/>
 
         <EditText
+            android:gravity="center"
             android:layout_gravity="center"
-            android:layout_width="100dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:id="@+id/editRefMarc"/>
+            android:id="@+id/editRef"/>
 
         <TextView
             android:layout_marginTop="10dp"
@@ -56,12 +121,14 @@
             android:layout_gravity="center">
 
             <EditText
+                android:gravity="center"
                 android:layout_gravity="center"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/editSoat"/>
 
             <Button
+                android:background="@drawable/calendar"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:onClick="buscarSoat"/>
@@ -83,12 +150,14 @@
             android:layout_gravity="center">
 
             <EditText
+                android:gravity="center"
                 android:layout_gravity="center"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/editTecno"/>
 
             <Button
+                android:background="@drawable/calendar"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:onClick="buscarTecno"/>
@@ -123,5 +192,7 @@
 
 
     </LinearLayout>
+
+    </ScrollView>
 
 </RelativeLayout>

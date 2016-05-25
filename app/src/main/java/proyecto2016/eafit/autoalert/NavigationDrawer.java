@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -24,6 +25,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.github.clans.fab.FloatingActionMenu;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -93,11 +96,7 @@ public class NavigationDrawer extends AppCompatActivity
         TextView Email = (TextView) findViewById(R.id.textEmail);
         Email.setText(email);
 
-
-
-
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        com.github.clans.fab.FloatingActionButton fab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.menu_item);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,6 +104,7 @@ public class NavigationDrawer extends AppCompatActivity
                 startActivity(i);
             }
         });
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

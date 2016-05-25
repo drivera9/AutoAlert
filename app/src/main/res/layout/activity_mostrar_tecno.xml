@@ -9,10 +9,33 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="proyecto2016.eafit.autoalert.MostrarTecno">
 
-    <CalendarView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/calendarView"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <CalendarView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/calendarView"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="40dp"
+            android:id="@+id/textFecha"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="aceptar"
+            android:text="aceptar"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+
 </RelativeLayout>

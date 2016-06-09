@@ -22,16 +22,19 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:design:22.2.0'
-    compile 'cz.msebera.android:httpclient:4.4.1.1'
     compile files('libs/httpmime-4.3.jar')
     compile files('libs/org.apache.http.legacy.jar')
     compile files('libs/org.apache.http.legacy.jar')
+    compile files('libs/volley.jar')
+    compile 'com.android.support:design:22.2.1'
+    compile 'cz.msebera.android:httpclient:4.4.1.1'
     compile 'com.google.android.gms:play-services-auth:8.4.0'
     compile 'com.github.clans:fab:1.6.0'
-    compile 'com.android.support:support-v4:22.0.0'
-    compile 'com.android.support:recyclerview-v7:22.+'
-    compile 'com.android.support:cardview-v7:22.+'
-    compile files('libs/volley.jar')
+    compile 'com.android.support:support-v4:22.2.1'
+    compile 'com.android.support:recyclerview-v7:22.2.1'
+    compile 'com.android.support:cardview-v7:22.2.1'
     compile 'com.bowyer.app:fabtransitionlayout:0.3.0@aar'
+    compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
 }
+
+apply plugin: 'com.google.gms.google-services'

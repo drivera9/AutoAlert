@@ -17,13 +17,14 @@ public class Vehiculos extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter mAdapter;
     private static String LOG_TAG = "CardViewActivity";
+    String ip = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vehiculos);
 
-
-
+        setTitle("Vehiculos");
+        ip = getIntent().getExtras().getString("ip");
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view_explore);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
@@ -44,6 +45,7 @@ public class Vehiculos extends AppCompatActivity {
             @Override
             public void onItemClick(int position, View v) {
                 Intent i = new Intent(Vehiculos.this, DetalleVehiculos.class);
+                i.putExtra("ip",ip);
                 Bundle bundle = new Bundle();
                 bundle.putString("nombre",((MyRecyclerViewAdapterVehiculo) mAdapter).getObjeto(position).getName());
                 i.putExtras(bundle);

@@ -1,16 +1,20 @@
 package proyecto2016.eafit.autoalert;
 
 import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -62,12 +67,18 @@ public class NavigationDrawer extends AppCompatActivity
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter mAdapter;
     private static String LOG_TAG = "CardViewActivity";
+    String ip = "";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
+
+        ip = getIntent().getExtras().getString("ip");
+
+
+        setTitle("Perfil");
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -91,7 +102,7 @@ public class NavigationDrawer extends AppCompatActivity
         emailDrawer.setText(email);
 
         TextView Nombres = (TextView) findViewById(R.id.textNombres);
-        Nombres.setText(nombre + " " + apellidos);
+        Nombres.setText(nombre.trim() + " " + apellidos.trim() + " - ");
 
         TextView Email = (TextView) findViewById(R.id.textEmail);
         Email.setText(email);
@@ -101,6 +112,19 @@ public class NavigationDrawer extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(NavigationDrawer.this, CrearVehiculo.class);
+                i.putExtra("ip" , ip);
+                i.putExtra("usuario", nombre);
+                startActivity(i);
+            }
+        });
+
+        com.github.clans.fab.FloatingActionButton fab2 = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.menu_item_2);
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(NavigationDrawer.this, CrearRecordatorio.class);
+                i.putExtra("ip" , ip);
+                i.putExtra("usuario", nombre);
                 startActivity(i);
             }
         });
@@ -115,28 +139,50 @@ public class NavigationDrawer extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        String url = "http://10.0.2.2:80/AUConsultar.php";
+        String url = "http://" + ip + ":80/AUConsultar.php";
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("sParametro", "Perfil"));
+        params.add(new BasicNameValuePair("sParametro", "Vehiculos"));
+        params.add(new BasicNameValuePair("sUsuario", nombre));
         String resultServer  = getHttpPost(url,params);
         System.out.println(resultServer);
         ArrayList<String> array = new ArrayList<String>();
+
+        ArrayList<String> marcas = new ArrayList<>();
+        ArrayList<String> ref = new ArrayList<>();
+        ArrayList<String> soat = new ArrayList<>();
+        ArrayList<String> tecno = new ArrayList<>();
+        ArrayList<String> seguro = new ArrayList<>();
         try {
             JSONArray jArray = new JSONArray(resultServer);
             for (int i = 0; i < jArray.length(); i++) {
                 JSONObject json = jArray.getJSONObject(i);
-                array.add(json.getString("marca"));
-                array.add(json.getString("referencia"));
+                marcas.add(json.getString("marca"));
+                ref.add(json.getString("referencia"));
                 array.add(json.getString("modelo"));
-                array.add(json.getString("fecha_soat"));
-                array.add(json.getString("fecha_tecno"));
-                array.add(json.getString("fecha_seguro"));
+                soat.add(json.getString("fecha_soat"));
+                tecno.add(json.getString("fecha_tecno"));
+                seguro.add(json.getString("fecha_seguro"));
 
             }
         }catch (JSONException e ){
             e.printStackTrace();
         }
+
+        TextView textVehiculos = (TextView) findViewById(R.id.texttNumeroVehiculos);
+        String texto = "";
+
+        for (int i = 0; i < marcas.size();i++){
+            texto = texto + "El vehiculo " + marcas.get(i).trim() + " " + ref.get(i).trim() + "\n" + "Tiene el soat en la fecha " + soat.get(i).trim() +
+                    "\n" + "La tecno en la fecha " + tecno.get(i).trim() + "\n" + " y el seguro en la fecha " + seguro.get(i).trim() + " " +
+                    " , No te olvides!" + "\n" + "\n";
+        }
+        String espacio = "                                                                                                                   " +
+                "                                                                                                                                          " +
+                "                                                                                                                   .";
+
+        textVehiculos.setText(texto + espacio);
+
 
 
     }
@@ -199,11 +245,13 @@ public class NavigationDrawer extends AppCompatActivity
 
         if (titulo.equals("Calendario")){
             Intent i = new Intent(NavigationDrawer.this, Calendario.class);
+            i.putExtra("ip",ip);
             startActivity(i);
         }
 
-        if (titulo.equals("Perfil")){
-            Intent i = new Intent(NavigationDrawer.this, Transicion.class);
+        if (titulo.equals("Contactanos")){
+            Intent i = new Intent(NavigationDrawer.this, Contactanos.class);
+            i.putExtra("ip",ip);
             startActivity(i);
             overridePendingTransition(R.transition.left_in, R.transition.left_out);
         }
@@ -211,21 +259,42 @@ public class NavigationDrawer extends AppCompatActivity
 
         if (titulo.equals("Explorar")){
             Intent i = new Intent(NavigationDrawer.this, CardViewExplore.class);
+            i.putExtra("ip",ip);
+            i.putExtra("usuario",nombre);
+            i.putExtra("apellidos",apellidos);
+            i.putExtra("email",email);
             startActivity(i);
             overridePendingTransition(R.transition.left_in, R.transition.left_out);
         }
 
         if (titulo.equals("Mis vehiculos")){
             Intent i = new Intent(NavigationDrawer.this, Vehiculos.class);
+            i.putExtra("ip",ip);
             startActivity(i);
             overridePendingTransition(R.transition.left_in, R.transition.left_out);
         }
 
-        /*if (titulo.equals("Ajustes")){
-            Intent i = new Intent(NavigationDrawer.this, SettingsActivity.class);
+        if (titulo.equals("Recordatorios")){
+            Intent i = new Intent(NavigationDrawer.this,Recordatorios.class);
+            i.putExtra("ip",ip);
+            i.putExtra("usuario",nombre);
             startActivity(i);
             overridePendingTransition(R.transition.left_in, R.transition.left_out);
-        }*/
+        }
+
+        if (titulo.equals("Ajustes")){
+            Intent i = new Intent(NavigationDrawer.this, SettingsActivity.class);
+            i.putExtra("ip",ip);
+            startActivity(i);
+            overridePendingTransition(R.transition.left_in, R.transition.left_out);
+        }
+
+        if (titulo.equals("Compartir")){
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, "Prueba la nueva aplicacion AutoAlert ! la mejor para administrar mis vehiculos !");
+            startActivity(Intent.createChooser(intent, "Compartir con.."));
+        }
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

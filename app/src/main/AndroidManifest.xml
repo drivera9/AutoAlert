@@ -41,18 +41,26 @@
         <activity android:name=".RegistreActivity" />
         <activity
             android:name=".CardViewExplore"
-            android:label="@string/title_activity_navigation_drawer"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Vehiculos"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_navigation_drawer" />
+        <activity android:name=".Vehiculos" />
         <activity android:name=".ExploreDetalleFoto" />
         <activity android:name=".SampleFab" />
         <activity android:name=".DetalleVehiculos" />
         <activity android:name=".DialogoPersonalizado" />
         <activity android:name=".CrearVehiculo" />
         <activity android:name=".MostrarSoat" />
-        <activity android:name=".MostrarTecno"></activity>
+        <activity android:name=".MostrarTecno" />
+        <activity android:name=".CrearRecordatorio" />
+        <activity android:name=".Email" />
+        <activity
+            android:name=".Recordatorios"
+            android:label="Recordatorios" />
+        <activity android:name=".DetalleRecordatorios" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings" />
+        <activity android:name=".CalendarioRecordatorio" />
+        <activity android:name=".Contactanos"></activity>
     </application>
 
 </manifest>

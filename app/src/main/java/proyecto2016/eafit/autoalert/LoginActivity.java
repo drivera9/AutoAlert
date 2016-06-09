@@ -75,7 +75,8 @@ import java.util.Map;
  */
 public class    LoginActivity extends FragmentActivity implements LoaderCallbacks<Cursor>, GoogleApiClient.OnConnectionFailedListener {
 
-    /**
+
+    String ip = "";/**
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
@@ -173,7 +174,10 @@ public class    LoginActivity extends FragmentActivity implements LoaderCallback
         mEmailRegistreInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, RegistreActivity.class));
+                EditText Ip = (EditText) findViewById(R.id.ip);
+                Intent i = new Intent(LoginActivity.this, RegistreActivity.class);
+                i.putExtra("ip" ,Ip.getText().toString().trim());
+                startActivity(i);
             }
         });
         mLoginFormView = findViewById(R.id.login_form);
@@ -272,7 +276,7 @@ public class    LoginActivity extends FragmentActivity implements LoaderCallback
             Intent i = new Intent(LoginActivity.this, NavigationDrawer.class);
             Bundle bundle = new Bundle();
             bundle.putString("nombre", acct.getDisplayName());
-            //bundle.putString("url",acct.getPhotoUrl().toString());
+            bundle.putString("ip",ip);
             bundle.putString("email", acct.getEmail().toString());
 
             i.putExtras(bundle);
@@ -343,8 +347,9 @@ public class    LoginActivity extends FragmentActivity implements LoaderCallback
         }
 
         if (isEmailValid(email) & isPasswordValid(password)) {
+            EditText Ip = (EditText) findViewById(R.id.ip);
 
-            String url = "http://10.0.2.2:80/AUConsultar.php";
+            String url = "http://" + Ip.getText().toString().trim() + ":80/AUConsultar.php";
 
             List<NameValuePair> params = new ArrayList<NameValuePair>();
             params.add(new BasicNameValuePair("sEmail", email.trim()));
@@ -370,10 +375,13 @@ public class    LoginActivity extends FragmentActivity implements LoaderCallback
                 e.printStackTrace();
             }
             if (pass.trim().equals(password.trim())){
+
+
                 // Toast.makeText(LoginActivity.this, response, Toast.LENGTH_LONG).show();
                 Toast.makeText(LoginActivity.this, "Bienvenido a AUTOALARM", Toast.LENGTH_LONG).show();
                 Intent i = new Intent(LoginActivity.this, NavigationDrawer.class);
                 Bundle bundle = new Bundle();
+                bundle.putString("ip",Ip.getText().toString().trim());
                 bundle.putString("nombre", nombre);
                 bundle.putString("apellidos", apellidos);
                 bundle.putString("email", email);

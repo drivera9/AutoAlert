@@ -123,7 +123,6 @@ public class Splash extends FragmentActivity implements LoaderManager.LoaderCall
             finish();
         } else {
             // Signed out, show unauthenticated UI.
-            Toast.makeText(getApplicationContext(),"nada",Toast.LENGTH_LONG).show();
         }
     }
 

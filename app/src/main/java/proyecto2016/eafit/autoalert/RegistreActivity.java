@@ -26,11 +26,13 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,10 +43,13 @@ public class RegistreActivity extends Activity implements View.OnClickListener  
     private EditText editTextEmail;
     private EditText editTextPassword;
     private Button buttonRegister;
+    String ip = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registre);
+
+        ip = getIntent().getExtras().getString("ip");
 
         editTextUsername = (EditText) findViewById(R.id.editTextUsername);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
@@ -103,6 +108,22 @@ public class RegistreActivity extends Activity implements View.OnClickListener  
                                         @Override
                                         public void onResponse(String response) {
                                             if (response.contains(DataObject.REGISTRE_SUCCESS) ) {
+
+                                                EditText nombres = (EditText) findViewById(R.id.editTextName);
+                                                EditText apellidos = (EditText) findViewById(R.id.editTextApellidos);
+
+                                                String url = "http://" + ip + ":80/AUGuardarUsuario.php";
+
+                                                List<NameValuePair> params = new ArrayList<NameValuePair>();
+
+                                                params.add(new BasicNameValuePair("sNombres", nombres.getText().toString().trim()));
+                                                params.add(new BasicNameValuePair("sApellidos", apellidos.getText().toString().trim()));
+                                                params.add(new BasicNameValuePair("sEmail", editTextEmail.getText().toString().trim()));
+                                                params.add(new BasicNameValuePair("sPass", editTextPassword.getText().toString().trim()));
+                                                params.add(new BasicNameValuePair("sUser", editTextUsername.getText().toString().trim()));
+
+                                                String resultServer = getHttpPost(url, params);
+                                                System.out.println(resultServer);
 
                                                 //Toast.makeText(RegistreActivity.this, response, Toast.LENGTH_LONG).show();
                                                 Toast.makeText(RegistreActivity.this, "Usuario Registrado Correctamente", Toast.LENGTH_LONG).show();

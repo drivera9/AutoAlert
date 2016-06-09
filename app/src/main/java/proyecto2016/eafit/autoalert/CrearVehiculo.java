@@ -41,10 +41,16 @@ public class CrearVehiculo extends AppCompatActivity {
     EditText editTecno;
     CheckBox checkTipoC;
     CheckBox checkTipoM;
+    String usuario;
+    String ip = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_vehiculo);
+
+        usuario = getIntent().getExtras().getString("usuario");
+        ip = getIntent().getExtras().getString("ip");
+
         FindViewById();
     }
 
@@ -68,7 +74,7 @@ public class CrearVehiculo extends AppCompatActivity {
     }
 
     public void guardar(View v){
-        String url = "http://10.0.2.2:80/AUGuardar.php";
+        String url = "http://" + ip + ":80/AUGuardar.php";
 
         String tipo = "";
 
@@ -86,6 +92,7 @@ public class CrearVehiculo extends AppCompatActivity {
 
             List<NameValuePair> params = new ArrayList<NameValuePair>();
             params.add(new BasicNameValuePair("sTipo", tipo));
+            params.add(new BasicNameValuePair("sUsuario", usuario.trim()));
             params.add(new BasicNameValuePair("sPlaca", editPlaca.getText().toString().trim()));
             params.add(new BasicNameValuePair("sMarca", editMarca.getText().toString().trim()));
             params.add(new BasicNameValuePair("sReferencia", editRef.getText().toString().trim()));

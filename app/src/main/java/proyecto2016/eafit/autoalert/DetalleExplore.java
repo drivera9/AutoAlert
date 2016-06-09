@@ -14,13 +14,17 @@ public class DetalleExplore extends AppCompatActivity {
     public String mAge;
     public int foto ;
     ImageView imagen;
+    String Email;
+    String desc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalle_explore);
 
         mContact = getIntent().getStringExtra("nombre");
-        mAge = getIntent().getStringExtra("años");
+        Email = getIntent().getStringExtra("email");
+        desc = getIntent().getStringExtra("desc");
+        mAge = "";
         foto = Integer.parseInt(getIntent().getStringExtra("foto"));
         TextView nombre = (TextView) findViewById(R.id.DETAILS_name);
         nombre.setText(mContact);
@@ -29,12 +33,22 @@ public class DetalleExplore extends AppCompatActivity {
         años.setText(mAge);
 
         TextView email = (TextView) findViewById(R.id.DETAILS_email);
-        email.setText(mContact.trim() + "@example.com");
+        email.setText(Email.trim());
 
         imagen= (ImageView) findViewById(R.id.imagen_detalle);
         imagen.setImageResource(foto);
 
+        TextView texto = (TextView) findViewById(R.id.texto);
 
+        texto.setText(desc + "\n" + "Puedes comunicarte con este email! " + Email);
+
+
+    }
+
+    public void email(View v){
+        Intent i = new Intent(DetalleExplore.this,Email.class);
+        i.putExtra("email",Email);
+        startActivity(i);
     }
 
     public void aumentar (View v){

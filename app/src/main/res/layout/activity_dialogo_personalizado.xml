@@ -11,15 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="¿Quieres hacer un pedido?"
+        android:text="Escribe en el muro!"
         android:id="@+id/textView2" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Contactate por acá"
-        android:id="@+id/textView3" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -36,7 +30,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Asunto:"
+                android:text="Titulo:"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:layout_marginTop="12dp"/>
 
@@ -44,7 +38,7 @@
                 android:id="@+id/et_EmailAsunto"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="Escribe tu Asunto">
+                android:hint="Escribe tu Titulo">
             </EditText>
 
             <TextView

@@ -37,12 +37,17 @@ public class DetalleVehiculos extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private static String LOG_TAG = "CardViewActivity";
     String nombre = "";
+    String ip = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalle_vehiculos);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
+        ip = getIntent().getExtras().getString("ip");
+
+        setTitle("Mis vehiculos");
 
         nombre = getIntent().getStringExtra("nombre");
 
@@ -91,7 +96,7 @@ public class DetalleVehiculos extends AppCompatActivity {
     private ArrayList<DataObject> getDataSetCarro() {
         ArrayList<DataObject> persons = new ArrayList<>();
 
-        String url = "http://10.0.2.2:80/AUConsultar.php";
+        String url = "http://" + ip + ":80/AUConsultar.php";
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("sParametro", nombre));

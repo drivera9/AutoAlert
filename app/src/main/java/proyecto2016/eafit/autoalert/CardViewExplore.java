@@ -17,7 +17,26 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionMenu;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.jar.Attributes;
 
 public class CardViewExplore extends AppCompatActivity {
@@ -27,20 +46,59 @@ public class CardViewExplore extends AppCompatActivity {
     private static String LOG_TAG = "CardViewActivity";
 
     Dialog customDialog = null;
-
+    String usuario;
+    String apellidos;
+    String email;
+    String desc;
     ArrayList<DataObject> persons = new ArrayList<>();
+    String ip = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
 
-
+        setTitle("Explorar");
+        ip = getIntent().getExtras().getString("ip");
+        usuario = getIntent().getExtras().getString("usuario");
+        apellidos = getIntent().getExtras().getString("apellidos");
+        email = getIntent().getExtras().getString("email");
 
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view_explore);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new MyRecyclerViewAdapterExplore(getDataSet());
+
+        String url = "http://" + ip + ":80/AUConsultar.php";
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("sParametro", "Muro"));
+        String resultServer  = getHttpPost(url,params);
+        System.out.println(resultServer);
+        ArrayList<String> array = new ArrayList<String>();
+
+        ArrayList<String> usuarios = new ArrayList<>();
+        ArrayList<String> titulos = new ArrayList<>();
+        ArrayList<String> contenidos = new ArrayList<>();
+        try {
+            JSONArray jArray = new JSONArray(resultServer);
+            for (int i = 0; i < jArray.length(); i++) {
+                JSONObject json = jArray.getJSONObject(i);
+                usuarios.add(json.getString("usuario"));
+                titulos.add(json.getString("titulo"));
+                contenidos.add(json.getString("contenido"));
+
+            }
+        }catch (JSONException e ){
+            e.printStackTrace();
+        }
+
+        for (int i = 0;i<usuarios.size();i++){
+            persons.add(new DataObject(usuarios.get(i).trim() , "", R.drawable.paisaje5,titulos.get(i).trim(),
+                    contenidos.get(i).trim()));
+        }
+
+
+        mAdapter = new MyRecyclerViewAdapterExplore(persons);
         mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view_explore);
@@ -63,10 +121,25 @@ public class CardViewExplore extends AppCompatActivity {
             public void onClick(View view) {
 
                 subject[0] = etAsunto.getText().toString();
+                desc = subject[0];
                 message[0] = etMensaje.getText().toString();
-                persons.add(0, new DataObject(subject[0], "25 years old", R.drawable.paisaje4, "Vendo", message[0]));
+                persons.add(0, new DataObject(subject[0], "", R.drawable.paisaje4, "", message[0]));
                 mAdapter = new MyRecyclerViewAdapterExplore(persons);
                 mRecyclerView.setAdapter(mAdapter);
+
+                String url = "http://" + ip + ":80/AUGuardarMuro.php";
+
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                params.add(new BasicNameValuePair("sUsuario", usuario.trim()));
+                params.add(new BasicNameValuePair("sTitulo", subject[0]));
+                params.add(new BasicNameValuePair("sContenido", message[0]));
+
+                String resultServer = getHttpPost(url, params);
+                System.out.println(resultServer);
+
+                Toast.makeText(CardViewExplore.this, "Se guardo correctamente!", Toast.LENGTH_SHORT).show();
+
+                //finish();
             }
         });
 
@@ -100,9 +173,10 @@ public class CardViewExplore extends AppCompatActivity {
                 bundle.putString("nombre",((MyRecyclerViewAdapterExplore) mAdapter).getObjeto(position).getName());
                 bundle.putString("años",((MyRecyclerViewAdapterExplore) mAdapter).getObjeto(position).getAge());
                 bundle.putString("foto",foto2 );
+                bundle.putString("email",email );
+                bundle.putString("desc",((MyRecyclerViewAdapterExplore) mAdapter).getObjeto(position).getDetalleTitulo() );
                 i.putExtras(bundle);
                 startActivity(i);
-                Log.i(LOG_TAG, " Clicked on  " + ((MyRecyclerViewAdapterExplore) mAdapter).getObjeto(position).getName());
             }
         });
     }
@@ -126,5 +200,33 @@ public class CardViewExplore extends AppCompatActivity {
     }
 
 
+    public String getHttpPost(String url,List<NameValuePair> params) {
+        StringBuilder str = new StringBuilder();
+        HttpClient client = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(url);
+
+        try {
+            httpPost.setEntity(new UrlEncodedFormEntity(params));
+            HttpResponse response = client.execute(httpPost);
+            StatusLine statusLine = response.getStatusLine();
+            int statusCode = statusLine.getStatusCode();
+            if (statusCode == 200) { // Status OK
+                HttpEntity entity = response.getEntity();
+                InputStream content = entity.getContent();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    str.append(line);
+                }
+            } else {
+                Log.e("Log", "Failed to download result..");
+            }
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return str.toString();
+    }
 
 }

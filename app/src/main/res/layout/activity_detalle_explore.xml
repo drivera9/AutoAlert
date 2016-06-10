@@ -115,6 +115,8 @@
                     android:id="@+id/texto"/>
 
                 <Button
+                    android:textColor="#FFFFFF"
+                    android:background="@color/primary_text"
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

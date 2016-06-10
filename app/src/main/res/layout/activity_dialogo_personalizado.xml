@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:padding="5dp"
-    android:layout_margin="10dp"
+    android:layout_margin="30dp"
     >
 
     <TextView
@@ -58,7 +58,10 @@
                 android:lines="7"/>
 
             <Button
-                android:layout_width="fill_parent"
+                android:layout_gravity="center"
+                android:textColor="#FFFFFF"
+                android:background="@color/primary_text"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Enviar"
                 android:id="@+id/btnEnviarMail" />

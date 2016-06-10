@@ -6,6 +6,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -116,20 +118,26 @@ public class CrearRecordatorio extends AppCompatActivity {
         String resultServer = getHttpPost(url, params);
         System.out.println(resultServer);
 
-        // Capturo la hora del evento
-        long hora = System.currentTimeMillis();
+        Intent notificationIntent = new Intent(getApplicationContext(), CrearRecordatorio.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(),
+                1, notificationIntent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
 
-        // Definimos la accion de la pulsacion sobre la notificacion (esto es opcional)
-        Context context = getApplicationContext();
-        Intent notificationIntent = new Intent(this, CrearRecordatorio.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        NotificationManager nm = (NotificationManager) getApplicationContext()
+                .getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // Defino la notificacion, icono, texto y hora
-        Notification notif = new Notification(1, "hola", Long.parseLong(date));
-        notif.setLatestEventInfo(context, "hola", "hola", contentIntent);
+        Resources res = getApplicationContext().getResources();
+        Notification.Builder builder = new Notification.Builder(getApplicationContext());
 
-        //Defino que la notificacion sea permamente
-        notif.flags = Notification.FLAG_ONGOING_EVENT;
+        builder.setContentIntent(contentIntent)
+                .setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.icono))
+                .setWhen(System.currentTimeMillis())
+                .setAutoCancel(true)
+                .setContentTitle("AutoAlert")
+                .setContentText("Recuerda tus fechas, no las dejes pasar !");
+        Notification n = builder.build();
+
+        nm.notify(1, n);
 
         Toast.makeText(CrearRecordatorio.this, "Se guardo correctamente!", Toast.LENGTH_SHORT).show();
         finish();

@@ -16,7 +16,7 @@
 
         <CalendarView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="300dp"
             android:id="@+id/calendarView"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
@@ -29,6 +29,8 @@
             android:id="@+id/textFecha"/>
 
         <Button
+            android:textColor="#FFFFFF"
+            android:background="@color/primary_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="aceptar"

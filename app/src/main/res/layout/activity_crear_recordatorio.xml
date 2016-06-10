@@ -95,12 +95,16 @@
             android:orientation="horizontal">
 
             <Button
+                android:textColor="#FFFFFF"
+                android:background="@color/primary_text"
                 android:text="Guardar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="guardar"/>
 
             <Button
+                android:textColor="#FFFFFF"
+                android:background="@color/accent"
                 android:text="Cancelar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

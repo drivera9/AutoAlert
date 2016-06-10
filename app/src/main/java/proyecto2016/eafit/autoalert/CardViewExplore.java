@@ -68,7 +68,7 @@ public class CardViewExplore extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        String url = "http://" + ip + ":80/AUConsultar.php";
+        String url = "http://" + ip + "/AUConsultar.php";
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("sParametro", "Muro"));
